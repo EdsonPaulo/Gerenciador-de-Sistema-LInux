@@ -1,0 +1,19 @@
+#!/bin/bash
+prog="$0"
+USERNAME=$1
+PASSWORD=$2
+instalado=$(ls /usr/bin/ |grep -sow $(basename "$0")) > /dev/null 2>&1
+if [ -z $instalado ]; then
+	ln "$prog" /usr/bin/alterar_senha
+fi
+
+if [ -z $USERNAME ] || [ -z $PASSWORD ]; then
+	echo "AVISO - Usuário ou senha não informardo"
+else
+	LOGIN=$(echo "$USERNAME" |tr [[:upper:]] [[:lower:]])
+	(echo $PASSWORD; echo $PASSWORD) | passwd $LOGIN
+	echo "Senha do usuário <$LOGIN> alterada com sucesso"
+fi
+
+## PASSWORD = $2, recebe o segundo parâmetro que e a nova senha
+

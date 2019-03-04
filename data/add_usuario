@@ -1,0 +1,40 @@
+#!/bin/bash
+prog="$0"  
+USERNAME=$1  
+PASSWORD=$2  
+instalado=$(ls /usr/bin/ |grep -sow $(basename "$0")) > /dev/null 2>&1
+if [ -z $instalado ]; then
+	ln "$prog" /usr/bin/add_usuario
+	# echo "ASR - Rodando a primeira vez"
+fi
+if [ -z $USERNAME ] || [ -z $PASSWORD ]; then
+	echo "AVISO - Usuário ou senha não informardo"
+else
+	LOGIN=$(echo "$USERNAME" |tr [[:upper:]] [[:lower:]])
+	unset USERNAME
+	USERNAME=$(cat /etc/passwd | grep -siow $LOGIN) > /dev/null 2>&1
+	if [ -z $USERNAME ]; then
+		# echo "O Usuário < $LOGIN > está disponível"
+		adduser $LOGIN --gecos "$LOGIN, , , , " --disabled-password
+		(echo $PASSWORD; echo $PASSWORD) | passwd $LOGIN
+		echo "$LOGIN criado com sucesso!"
+	else
+		echo "AVISO - Usuário < $LOGIN > já existe"
+	fi
+fi
+
+# prog = “$0”, retorna o nome do arquivo que é utilizado para rodar este programa
+
+# USERNAME = $1, recebe primeiro parâmetro digitado no comando usuario_novo
+
+# PASSWORD = $2, recebe o segundo parâmetro digitado no comando usuario_novo
+
+# Variável instalado, Linha 6, recebe o resultado de uma busca para verificar se existe no diretório /usr/bin/ instalado o comando gerado com a execução desse script.
+
+# Nas linhas sete e doze, o script verifica se a variável instalado é nula, se a condição for verdadeira ela gera um link do script cujo o nome é armazenado na variável prog no diretório /usr/bin/novo_usuario, e esse script passa a ser executado com o comando “# asr_adduser ‘usuário’, ‘senha’”.
+
+# Após verificar se esse script está instalado no Linux, o bloco de código entre as linhas quatorze e trinta verifica se as variáveis USUARIO e PASSWORD são nulas.
+
+# Se a condição for falsa a variável LOGIN na linha dezessete recebe o conteúdo da variável USUARIO com tratamento de caixa baixa. 
+
+# Após ser limpa (unset)a variável USERNAME recebe o resultado de uma busca para verificar se usuário já existe no arquivo /etc/passwd. Se a variável for nula indica que está disponível e na linha vinte e quatro o usuário é adicionado ao Linux e na linha vinte e seis sua senha é atribuída.

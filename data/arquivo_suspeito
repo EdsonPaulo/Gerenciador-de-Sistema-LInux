@@ -1,0 +1,12 @@
+#!/bin/bash
+variavel="true"
+extent=$1
+password=$2
+while [ $variavel = "true" ]; 
+do
+	saida=$(echo $password | sudo -S -u root -s find /home/edsonpaulo/ -name *$extent)
+	if [ ! -z $saida ]; then
+	echo "Arquivo irregular encontrado: $saida";	
+	break;
+	fi
+done

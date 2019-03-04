@@ -1,0 +1,22 @@
+#!/bin/bash
+operacao=$1
+arquivo=$2
+senha=$3
+if [ ! -z $operacao ] && [ ! -z $arquivo ] && [ ! -z $senha ]; then
+	case $operacao in
+		-b) echo $senha | sudo -S -u root -s chattr +i $arquivo;
+		    echo "$arquivo bloqueado com sucesso!";;
+
+		-l) echo $senha | sudo -S -u root -s chattr -i $arquivo;
+		    echo "$arquivo desbloqueado com sucesso!";;
+		
+		 *) echo "Argumento $operacao Inválido";
+	esac
+else
+	echo "Erro! Faça:"
+	echo "\tbloquear [Opção] [Arquivo] [Senha]"
+	echo "Opções: [-b bloquear] \n\t[-l liberar]"
+fi
+
+
+

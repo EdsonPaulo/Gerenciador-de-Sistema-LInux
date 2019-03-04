@@ -1,0 +1,10 @@
+#!/bin/bash
+op=$1
+password=$2
+if [ ! -z $op ] && [ ! -z $password ]; then
+	print $(echo $password|sudo -S -u root -s dmidecode -t $op)
+elif [ -z $op ]; then
+	echo "Passe um argumento numério de 0-39;"
+elif [ -z $password ]; then
+	echo "Passe a senha como 2o argumento;"
+fi
